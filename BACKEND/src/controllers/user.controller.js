@@ -2,15 +2,18 @@ const { User } = require("../models/user.model");
 const { hashPass } = require("../Service/hashing");
 const { UserSchema, userUpdateSchema } = require("../Validation/userzod");
 
-const mongoose = require("mongoose");
-
 const getUsers = async (req, res) => {
   try {
     const { pag, lim, search } = await req.query;
-    let query = {};
+    let query = {
+      $or: [
+        { name: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } },
+      ],
+    };
 
-    if (search && search.trim().length > 0) {
-      query.name = search;
+    if (!search.trim().length) {
+      query = {};
     }
 
     const allUsers = await User.find(query)
