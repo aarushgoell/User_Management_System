@@ -33,36 +33,31 @@ const getUsers = async (req, res) => {
 };
 
 const createUser = async (req, res) => {
-  const inpCheck = UserSchema.safeParse(req.body);
-  if (!inpCheck.success) {
-    return res.status(401).json({
-      message: "Data is invalid",
-    });
-  }
-
-  const { name, email, password, phone } = req.body;
-  const userExistCheck = await User.find({ email: email });
-  if (userExistCheck.length > 0) {
-    return res.status(409).json({
-      message: "User already exist",
-    });
-  }
   try {
+    const inpCheck = UserSchema.safeParse(req.body);
+    if (!inpCheck.success) {
+      return res.status(401).json({
+        message: "Data is invalid",
+      });
+    }
+
+    const { name, email, password, phone } = req.body;
+    const userExistCheck = await User.find({ email: email });
+    if (userExistCheck.length > 0) {
+      return res.status(409).json({
+        message: "User already exist",
+      });
+    }
     const hashedPass = await hashPass(password);
     const newUser = await User.create({
       name,
       email,
       phone,
       password: hashedPass,
-    }).select({
-      name: 1,
-      email: 1,
-      phone: 1,
-      createdAt: 1,
     });
     return res.status(201).json({
       message: "New user added",
-      newUser,
+      newUser: { name: newUser.name, email: newUser.email },
     });
   } catch (err) {
     res.status(404).json({
@@ -72,33 +67,33 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const userId = req.params.id;
-  const { success } = userUpdateSchema.safeParse(req.body);
+  try {
+    const userId = req.params.id;
+    const { success } = userUpdateSchema.safeParse(req.body);
 
-  if (!success) {
-    return res.status(400).json({
-      message: "Data is in not correct format",
-    });
-    t;
-  }
+    if (!success) {
+      return res.status(400).json({
+        message: "Data is in not correct format",
+      });
+      t;
+    }
 
-  const objectLength = Object.keys(req.body).length;
-  if (!objectLength) {
-    return res.status(400).json({
-      message: "Please Enter some field to update",
-    });
-  }
-
-  if (req.body.email) {
-    const userExistCheck = await User.find({ email: req.body.email });
-    if (userExistCheck.length > 0) {
-      return res.status(409).json({
-        message: "User already exist",
+    const objectLength = Object.keys(req.body).length;
+    if (!objectLength) {
+      return res.status(400).json({
+        message: "Please Enter some field to update",
       });
     }
-  }
 
-  try {
+    if (req.body.email) {
+      const userExistCheck = await User.find({ email: req.body.email });
+      if (userExistCheck.length > 0) {
+        return res.status(409).json({
+          message: "User already exist",
+        });
+      }
+    }
+
     const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
       new: true,
     });
@@ -113,10 +108,9 @@ const updateUser = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const userId = req.params.id;
-  const objectId = new mongoose.Types.ObjectId(userId);
   try {
-    const updatedUser = await User.findByIdAndDelete(objectId);
+    const userId = req.params.id;
+    const updatedUser = await User.findByIdAndDelete(userId);
     if (updatedUser) {
       return res.status(200).json({
         message: "User is removed",
