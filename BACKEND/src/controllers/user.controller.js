@@ -1,22 +1,27 @@
 const { User } = require("../models/user.model");
 const { hashPass } = require("../Service/hashing");
-const { UserSchema } = require("../Validation/userzod");
+const { UserSchema, userUpdateSchema } = require("../Validation/userzod");
 
 const mongoose = require("mongoose");
 
 const getUsers = async (req, res) => {
   try {
+    const { pag, lim, search } = await req.query;
+    let query = {};
 
-    const {pag,lim} = await req.query;
+    if (search && search.trim().length > 0) {
+      query.name = search;
+    }
 
-
-    const allUsers = await User.find().skip((pag - 1) * lim).limit(lim).select({
-      name: 1,
-      email: 1,
-      phone : 1,
-      _id: 0,
-      createdAt: 1,
-    });
+    const allUsers = await User.find(query)
+      .skip((pag - 1) * lim)
+      .limit(lim)
+      .select({
+        name: 1,
+        email: 1,
+        phone: 1,
+        createdAt: 1,
+      });
     res.status(200).json({
       allUsers,
     });
@@ -49,6 +54,11 @@ const createUser = async (req, res) => {
       email,
       phone,
       password: hashedPass,
+    }).select({
+      name: 1,
+      email: 1,
+      phone: 1,
+      createdAt: 1,
     });
     return res.status(201).json({
       message: "New user added",
@@ -63,17 +73,36 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const userId = req.params.id;
-  const name = req.body.name;
+  const { success } = userUpdateSchema.safeParse(req.body);
+
+  if (!success) {
+    return res.status(400).json({
+      message: "Data is in not correct format",
+    });
+    t;
+  }
+
+  const objectLength = Object.keys(req.body).length;
+  if (!objectLength) {
+    return res.status(400).json({
+      message: "Please Enter some field to update",
+    });
+  }
+
+  if (req.body.email) {
+    const userExistCheck = await User.find({ email: req.body.email });
+    if (userExistCheck.length > 0) {
+      return res.status(409).json({
+        message: "User already exist",
+      });
+    }
+  }
 
   try {
-    const updatedUser = await User.findByIdAndUpdate(
-      userId,
-      {
-        name: name,
-      },
-      { new: true }
-    );
-    res.status(400).json({
+    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
+      new: true,
+    });
+    res.status(200).json({
       updatedUser,
     });
   } catch (err) {
@@ -88,7 +117,6 @@ const deleteUser = async (req, res) => {
   const objectId = new mongoose.Types.ObjectId(userId);
   try {
     const updatedUser = await User.findByIdAndDelete(objectId);
-    console.log(updatedUser);
     if (updatedUser) {
       return res.status(200).json({
         message: "User is removed",
