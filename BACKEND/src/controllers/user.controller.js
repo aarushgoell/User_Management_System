@@ -19,6 +19,7 @@ const getUsers = async (req, res) => {
     const allUsers = await User.find(query)
       .skip((pag - 1) * lim)
       .limit(lim)
+      .sort({ name: 1 })
       .select({
         name: 1,
         email: 1,
