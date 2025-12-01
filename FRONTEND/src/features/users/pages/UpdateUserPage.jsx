@@ -18,11 +18,14 @@ export function UpdateUserPage() {
     setSuccess("");
     try {
       console.log("Entered");
-      const res = await axios.put(`http://localhost:3000/users/${id}`, {
-        name,
-        email,
-        phone,
-      });
+      const res = await axios.put(
+        `https://user-management-system-1-cw34.onrender.com/users/${id}`,
+        {
+          name,
+          email,
+          phone,
+        }
+      );
       setServerError("");
       setSuccess("User Updated successfully!");
     } catch (err) {

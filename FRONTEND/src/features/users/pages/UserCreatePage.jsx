@@ -45,12 +45,15 @@ export function UserCreatePage() {
     if (!validate()) return;
     try {
       console.log(name, password, email, phone);
-      const res = await axios.post("http://localhost:3000/users", {
-        name,
-        password,
-        email,
-        phone,
-      });
+      const res = await axios.post(
+        "https://user-management-system-1-cw34.onrender.com/users",
+        {
+          name,
+          password,
+          email,
+          phone,
+        }
+      );
       setServerError("");
       setSuccess("User created successfully!");
     } catch (err) {

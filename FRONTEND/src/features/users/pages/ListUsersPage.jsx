@@ -20,7 +20,9 @@ export function ListUsersPage() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/users/${id}`);
+      await axios.delete(
+        `https://user-management-system-1-cw34.onrender.com/users/${id}`
+      );
       setManualRender((e) => e + 1);
     } catch (err) {
       console.log("Delete failed:", err.message);

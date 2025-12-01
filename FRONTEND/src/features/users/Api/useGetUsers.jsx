@@ -12,7 +12,7 @@ export function useGetUsers(pag, lim, search, manualRender) {
       try {
         setLoading(true);
         const response = await axios.get(
-          `http://localhost:3000/users/fetch?pag=${pag}&lim=${lim}&search=${search}`
+          `https://user-management-system-1-cw34.onrender.com/users/fetch?pag=${pag}&lim=${lim}&search=${search}`
         );
         setData(response.data);
         setLoading(false);
