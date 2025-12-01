@@ -114,7 +114,7 @@ export function UserCreatePage() {
             ></Input>
             {errors.password && <p className="error">{errors.password}</p>}
             <div class="submitparent">
-              <button class="sub3637mit" type="submit">
+              <button class="submit" type="submit">
                 Submit
               </button>
             </div>
