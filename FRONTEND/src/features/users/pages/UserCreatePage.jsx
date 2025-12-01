@@ -39,7 +39,7 @@ export function UserCreatePage() {
 
   async function handleSumbit(e) {
     e.preventDefault();
-    setErrors({});
+    // setErrors({});
     setSuccess("");
 
     if (!validate()) return;
