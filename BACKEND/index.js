@@ -1,30 +1,27 @@
-
-require('./src/database/db');
+require("./src/database/db");
 
 const express = require("express");
 
-const UserRoutes = require("./src/routes/user.routes")
+const UserRoutes = require("./src/routes/user.routes");
 
 const app = express();
+const cors = require("cors");
 
+app.use(cors());
 
 app.use(express.json());
 
 app.get("/", (res) => {
-    return res.status(200).json({
-        message: "Server is started"
-    })
-})
+  return res.status(200).json({
+    message: "Server is started",
+  });
+});
 
-app.use("/users", UserRoutes)
-
+app.use("/users", UserRoutes);
 
 app.listen(3000, () => {
-    console.log("Server started");
-})
-
-
-
+  console.log("Server started");
+});
 
 // {
 //     "message": "New user added",

@@ -1,18 +1,14 @@
-import { useState } from "react";
-
-export function Input({ type, placeholder, name }) {
-  const [inputState, setInputstate] = useState("");
+export function Input({ type, placeholder, name, setState, value }) {
   return (
     <div>
-      <div>{name}:</div>
-
-      <div>
+      <div class = "inputname">{name}:</div>
+      <div class = "input">
         <input
           type={type}
           placeholder={placeholder}
-          value={inputState}
+          value= {value}
           onChange={(e) => {
-            setInputstate(e.target.value);
+            setState(e.target.value);
           }}
         />
       </div>

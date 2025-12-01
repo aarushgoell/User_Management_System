@@ -2,57 +2,29 @@ import { useState } from "react";
 import { Heading } from "../../../components/ui/Heading";
 import { Input } from "../../../components/ui/Input";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
-export function UserCreatePage() {
+export function UpdateUserPage() {
   const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState(0);
   const [success, setSuccess] = useState("");
-  const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
 
-  const validate = () => {
-    let err = {};
-
-    if (!name.trim()) err.name = "Name is required";
-    if (!email.trim()) {
-      err.email = "Email is required";
-    } else if (!/^\S+@\S+\.\S+$/.test(email)) {
-      err.email = "Enter a valid email";
-    }
-
-    if (!password.trim()) {
-      err.password = "Password is required";
-    } else if (password.length < 6) {
-      err.password = "Password must be at least 6 characters";
-    }
-
-    if (!phone.trim()) {
-      err.phone = "Phone number is required";
-    } else if (!/^\d{10}$/.test(phone)) {
-      err.phone = "Phone must be 10 digits";
-    }
-    setErrors(err);
-    return Object.keys(err).length === 0;
-  };
+  const { id } = useLocation().state;
 
   async function handleSumbit(e) {
     e.preventDefault();
-    setErrors({});
     setSuccess("");
-
-    if (!validate()) return;
     try {
-      console.log(name, password, email, phone);
-      const res = await axios.post("http://localhost:3000/users", {
+      console.log("Entered");
+      const res = await axios.put(`http://localhost:3000/users/${id}`, {
         name,
-        password,
         email,
         phone,
       });
       setServerError("");
-      setSuccess("User created successfully!");
+      setSuccess("User Updated successfully!");
     } catch (err) {
       if (err.response) {
         if (err.response.data?.errors) {
@@ -67,14 +39,13 @@ export function UserCreatePage() {
       }
     }
     setName("");
-    setPassword("");
     setPhone("");
     setEmail("");
   }
 
   return (
     <div>
-      <Heading heading="User Management System" nav="/allUsers"></Heading>
+      <Heading heading="Update System" nav="/"></Heading>
       <div class="inputcontainertop">
         <div class="inputcontainerchild">
           <form onSubmit={handleSumbit}>
@@ -85,7 +56,6 @@ export function UserCreatePage() {
               setState={setName}
               value={name}
             ></Input>
-            {errors.name && <p className="error">{errors.name}</p>}
             <Input
               type="email"
               placeholder="Enter Email"
@@ -93,7 +63,6 @@ export function UserCreatePage() {
               setState={setEmail}
               value={email}
             ></Input>
-            {errors.email && <p className="error">{errors.email}</p>}
             <Input
               type="number"
               placeholder="Enter Phone"
@@ -101,18 +70,9 @@ export function UserCreatePage() {
               setState={setPhone}
               value={phone}
             ></Input>
-            {errors.phone && <p className="error">{errors.phone}</p>}
-            <Input
-              type="password"
-              placeholder="Enter Password"
-              name="Password"
-              setState={setPassword}
-              value={password}
-            ></Input>
-            {errors.password && <p className="error">{errors.password}</p>}
             <div class="submitparent">
-              <button class="sub3637mit" type="submit">
-                Submit
+              <button class="submit" type="submit">
+                Update
               </button>
             </div>
             {serverError && <p className="error">{serverError}</p>}
@@ -123,3 +83,7 @@ export function UserCreatePage() {
     </div>
   );
 }
+
+// Aarush
+// aarushgoel2006@gmail.com
+// 9418648056
