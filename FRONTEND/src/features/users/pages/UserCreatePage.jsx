@@ -7,7 +7,7 @@ export function UserCreatePage() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState(0);
+  const [phone, setPhone] = useState("");
   const [success, setSuccess] = useState("");
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
@@ -59,6 +59,10 @@ export function UserCreatePage() {
       );
       setLoad(false);
       setServerError("");
+      setName("");
+      setPassword("");
+      setPhone("");
+      setEmail("");
       setSuccess("User created successfully!");
     } catch (err) {
       setLoad(false);
@@ -74,10 +78,6 @@ export function UserCreatePage() {
         setServerError("Network error. Try again");
       }
     }
-    setName("");
-    setPassword("");
-    setPhone("");
-    setEmail("");
   }
 
   return (
