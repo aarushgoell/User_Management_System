@@ -24,6 +24,9 @@
   font-weight: bolder;
   font-size: 40px;
 }
+.error{
+  color: red;
+}
 
 .input {
   margin: 5px 0px;

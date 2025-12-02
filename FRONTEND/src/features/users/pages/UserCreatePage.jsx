@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Heading } from "../../../components/ui/Heading";
 import { Input } from "../../../components/ui/Input";
 import axios from "axios";
-
+import { Loader } from "../../../components/ui/Loader";
 export function UserCreatePage() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -11,6 +11,8 @@ export function UserCreatePage() {
   const [success, setSuccess] = useState("");
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
+
+  const [load, setLoad] = useState(false);
 
   const validate = () => {
     let err = {};
@@ -39,10 +41,11 @@ export function UserCreatePage() {
 
   async function handleSumbit(e) {
     e.preventDefault();
-    // setErrors({});
     setSuccess("");
-
-    if (!validate()) return;
+    if (!validate()) {
+      setLoad(false);
+      return;
+    }
     try {
       console.log(name, password, email, phone);
       const res = await axios.post(
@@ -54,9 +57,11 @@ export function UserCreatePage() {
           phone,
         }
       );
+      setLoad(false);
       setServerError("");
       setSuccess("User created successfully!");
     } catch (err) {
+      setLoad(false);
       if (err.response) {
         if (err.response.data?.errors) {
           setErrors(err.response.data.errors);
@@ -120,6 +125,7 @@ export function UserCreatePage() {
             </div>
             {serverError && <p className="error">{serverError}</p>}
             {success && <p style={{ color: "green" }}>{success}</p>}
+            {load && <Loader></Loader>}
           </form>
         </div>
       </div>
