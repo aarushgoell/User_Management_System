@@ -77,7 +77,7 @@ const updateUser = async (req, res) => {
   console.log(success);
   if (!success) {
     return res.status(400).json({
-      res,
+      message: "Data is not in correct-format",
     });
   }
 
@@ -93,14 +93,23 @@ const updateUser = async (req, res) => {
 
     if (req.body.email) {
       const userExistCheck = await User.find({ email: req.body.email });
-      if (userExistCheck.length > 0) {
+      if (userExistCheck.length > 1) {
         return res.status(409).json({
           message: "User already exist",
         });
       }
     }
 
-    const updatedUser = await User.findByIdAndUpdate(userId, req.body, {
+    // const myObject = { a: 1, b: 2, c: 3 };
+
+    const newObject = {};
+    for (const key in req.body) {
+      if (req.body[key].length >= 1) {
+        newObject[key] = req.body[key];
+      }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, newObject, {
       new: true,
     });
     res.status(200).json({
