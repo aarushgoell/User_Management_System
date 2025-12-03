@@ -73,7 +73,7 @@ export function ListUsersPage() {
                       navigate("/update", {
                         state: {
                           id: _id,
-                          prevname : name,
+                          prevname: name,
                           prevphone: phone,
                           prevemail: email,
                         },
@@ -97,7 +97,14 @@ export function ListUsersPage() {
             <div class="arrowscontainer">
               <div
                 onClick={() => {
-                  setpag((c) => c + 1);
+                  setpag((c) => {
+                    if (allUsers.length == 10) {
+                      return c + 1;
+                    }
+                    else{
+                      return c;
+                    }
+                  });
                 }}
               >
                 <img
