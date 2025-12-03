@@ -5,13 +5,12 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 export function UpdateUserPage() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState(0);
+  const { id, prevname, prevemail, prevphone } = useLocation().state;
+  const [name, setName] = useState(prevname);
+  const [email, setEmail] = useState(prevemail);
+  const [phone, setPhone] = useState(prevphone);
   const [success, setSuccess] = useState("");
   const [serverError, setServerError] = useState("");
-
-  const { id } = useLocation().state;
 
   async function handleSumbit(e) {
     e.preventDefault();
@@ -19,7 +18,8 @@ export function UpdateUserPage() {
     try {
       console.log("Entered");
       const res = await axios.put(
-        `https://user-management-system-1-cw34.onrender.com/users/${id}`,
+        // `https://user-management-system-1-cw34.onrender.com/users/${id}`,
+         `http://localhost:3000/users/${id}`,
         {
           name,
           email,
@@ -41,9 +41,6 @@ export function UpdateUserPage() {
         setServerError("Network error. Try again");
       }
     }
-    setName("");
-    setPhone("");
-    setEmail("");
   }
 
   return (

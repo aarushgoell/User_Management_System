@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 export function ListUsersPage() {
   // { pag, lim, search }
-  const [search, setSearch] = useState("aarush");
+  const [search, setSearch] = useState("");
   const [pag, setpag] = useState(1);
   const [manualRender, setManualRender] = useState(0);
   const { data, loading, error } = useGetUsers(pag, 10, search, manualRender);
@@ -73,6 +73,9 @@ export function ListUsersPage() {
                       navigate("/update", {
                         state: {
                           id: _id,
+                          prevname : name,
+                          prevphone: phone,
+                          prevemail: email,
                         },
                       });
                     }}

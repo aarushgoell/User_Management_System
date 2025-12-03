@@ -59,10 +59,6 @@ export function UserCreatePage() {
       );
       setLoad(false);
       setServerError("");
-      setName("");
-      setPassword("");
-      setPhone("");
-      setEmail("");
       setSuccess("User created successfully!");
     } catch (err) {
       setLoad(false);
