@@ -18,8 +18,7 @@ export function UpdateUserPage() {
     try {
       console.log("Entered");
       const res = await axios.put(
-        // `https://user-management-system-1-cw34.onrender.com/users/${id}`,
-         `http://localhost:3000/users/${id}`,
+        `https://user-management-system-1-cw34.onrender.com/users/${id}`,
         {
           name,
           email,

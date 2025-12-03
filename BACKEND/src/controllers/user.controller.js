@@ -73,15 +73,15 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-  const { success } = userUpdateSchema.safeParse(req.body);
+  const {success} = userUpdateSchema.safeParse(req.body);
   console.log(success);
   if (!success) {
     return res.status(400).json({
-      message: "Data is not in correct-format",
+      message: "10 digit Number allowed",
     });
   }
 
-  try {
+  try { 
     const userId = req.params.id;
 
     const objectLength = Object.keys(req.body).length;
