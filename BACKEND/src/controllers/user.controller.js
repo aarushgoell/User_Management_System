@@ -45,6 +45,8 @@ const createUser = async (req, res) => {
       });
     }
 
+    console.log(req.body);
+
     const { name, email, password, phone } = req.body;
     const userExistCheck = await User.find({ email: email });
     if (userExistCheck.length > 0) {
@@ -71,16 +73,16 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
+  const { success } = userUpdateSchema.safeParse(req.body);
+  console.log(success);
+  if (!success) {
+    return res.status(400).json({
+      res,
+    });
+  }
+
   try {
     const userId = req.params.id;
-    const { success } = userUpdateSchema.safeParse(req.body);
-
-    if (!success) {
-      return res.status(400).json({
-        message: "Data is in not correct format",
-      });
-      t;
-    }
 
     const objectLength = Object.keys(req.body).length;
     if (!objectLength) {
